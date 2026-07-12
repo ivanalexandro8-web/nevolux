@@ -66,6 +66,18 @@ router.delete('/cuentas/:id', controller.eliminarCuenta);
  *         name: id
  *         required: true
  *         schema: { type: integer }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - password_nueva
+ *             properties:
+ *               password_nueva:
+ *                 type: string
+ *                 example: nuevaClave123
  *     responses:
  *       200: { description: OK }
  */
@@ -83,6 +95,18 @@ router.put('/cuentas/:id/password', controller.restablecerPassword);
  *         name: asesorMateriaId
  *         required: true
  *         schema: { type: integer }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - aprobar
+ *             properties:
+ *               aprobar:
+ *                 type: boolean
+ *                 example: true
  *     responses:
  *       200: { description: OK }
  */

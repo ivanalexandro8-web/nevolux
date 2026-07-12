@@ -4,16 +4,13 @@ const controller = require('../controllers/estudianteController');
 const verificarToken = require('../middlewares/verificarToken');
 const verificarEstudiante = require('../middlewares/verificarEstudiante');
 const upload = require('../middlewares/upload');
-
 router.use(verificarToken, verificarEstudiante);
-
 /**
  * @swagger
  * tags:
  *   name: Estudiantes
  *   description: Perfil y busqueda de asesores
  */
-
 /**
  * @swagger
  * /api/estudiantes/perfil:
@@ -25,7 +22,6 @@ router.use(verificarToken, verificarEstudiante);
  *       200: { description: OK }
  */
 router.get('/perfil', controller.miPerfil);
-
 /**
  * @swagger
  * /api/estudiantes/perfil:
@@ -33,11 +29,31 @@ router.get('/perfil', controller.miPerfil);
  *     summary: Actualizar mis datos
  *     tags: [Estudiantes]
  *     security: [{ bearerAuth: [] }]
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: Juan
+ *               apellido_paterno:
+ *                 type: string
+ *                 example: Perez
+ *               apellido_materno:
+ *                 type: string
+ *                 example: Lopez
+ *               cuatrimestre:
+ *                 type: integer
+ *                 example: 5
+ *               carrera:
+ *                 type: string
+ *                 example: Desarrollo de Software
  *     responses:
  *       200: { description: OK }
  */
 router.put('/perfil', controller.actualizarPerfil);
-
 /**
  * @swagger
  * /api/estudiantes/password:
@@ -45,11 +61,26 @@ router.put('/perfil', controller.actualizarPerfil);
  *     summary: Cambiar mi contraseña
  *     tags: [Estudiantes]
  *     security: [{ bearerAuth: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - password_actual
+ *               - password_nueva
+ *             properties:
+ *               password_actual:
+ *                 type: string
+ *                 example: clave123
+ *               password_nueva:
+ *                 type: string
+ *                 example: claveNueva456
  *     responses:
  *       200: { description: OK }
  */
 router.put('/password', controller.cambiarPassword);
-
 /**
  * @swagger
  * /api/estudiantes/asesores/{materiaId}:
@@ -66,7 +97,6 @@ router.put('/password', controller.cambiarPassword);
  *       200: { description: OK }
  */
 router.get('/asesores/:materiaId', controller.buscarAsesores);
-
 /**
  * @swagger
  * /api/estudiantes/foto:
@@ -85,5 +115,4 @@ router.get('/asesores/:materiaId', controller.buscarAsesores);
  *       200: { description: OK }
  */
 router.post('/foto', upload.single('foto'), controller.subirFoto);
-
 module.exports = router;

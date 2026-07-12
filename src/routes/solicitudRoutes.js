@@ -4,16 +4,13 @@ const controller = require('../controllers/solicitudController');
 const verificarToken = require('../middlewares/verificarToken');
 const verificarEstudiante = require('../middlewares/verificarEstudiante');
 const verificarAsesor = require('../middlewares/verificarAsesor');
-
 router.use(verificarToken);
-
 /**
  * @swagger
  * tags:
  *   name: Solicitudes
  *   description: Solicitudes de asesoria entre estudiante y asesor
  */
-
 /**
  * @swagger
  * /api/solicitudes:
@@ -21,11 +18,26 @@ router.use(verificarToken);
  *     summary: Crear una solicitud de asesoria (estudiante)
  *     tags: [Solicitudes]
  *     security: [{ bearerAuth: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - asesor_id
+ *               - materia_id
+ *             properties:
+ *               asesor_id:
+ *                 type: integer
+ *                 example: 1
+ *               materia_id:
+ *                 type: integer
+ *                 example: 1
  *     responses:
  *       201: { description: Creada }
  */
 router.post('/', verificarEstudiante, controller.crear);
-
 /**
  * @swagger
  * /api/solicitudes/estudiante:
@@ -37,7 +49,6 @@ router.post('/', verificarEstudiante, controller.crear);
  *       200: { description: OK }
  */
 router.get('/estudiante', verificarEstudiante, controller.misSolicitudesEstudiante);
-
 /**
  * @swagger
  * /api/solicitudes/asesor:
@@ -49,7 +60,6 @@ router.get('/estudiante', verificarEstudiante, controller.misSolicitudesEstudian
  *       200: { description: OK }
  */
 router.get('/asesor', verificarAsesor, controller.misSolicitudesAsesor);
-
 /**
  * @swagger
  * /api/solicitudes/{id}/responder:
@@ -62,11 +72,22 @@ router.get('/asesor', verificarAsesor, controller.misSolicitudesAsesor);
  *         name: id
  *         required: true
  *         schema: { type: integer }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - aceptar
+ *             properties:
+ *               aceptar:
+ *                 type: boolean
+ *                 example: true
  *     responses:
  *       200: { description: OK }
  */
 router.put('/:id/responder', verificarAsesor, controller.responder);
-
 /**
  * @swagger
  * /api/solicitudes/{id}/cancelar:
@@ -83,5 +104,4 @@ router.put('/:id/responder', verificarAsesor, controller.responder);
  *       200: { description: OK }
  */
 router.put('/:id/cancelar', controller.cancelar);
-
 module.exports = router;
