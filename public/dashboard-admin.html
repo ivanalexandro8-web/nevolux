@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nevolux — Panel del administrador</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">nevo<span style="color:var(--accent)">lux</span></div>
+      <div class="nav-group">
+        <div class="nav-item active" data-view="estudiantes">Estudiantes</div>
+        <div class="nav-item" data-view="asesores">Asesores</div>
+        <div class="nav-item" data-view="quejas">Quejas y sugerencias</div>
+      </div>
+      <div class="session-box">
+        <span class="who" id="session-nombre">—</span>
+        Administrador
+        <div style="margin-top: 0.8rem;">
+          <button class="btn btn-ghost" style="width:100%; font-size:0.8rem; padding:0.5rem;" onclick="logout()">Cerrar sesión</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <!-- Vista: estudiantes -->
+      <section id="view-estudiantes">
+        <div class="main-header">
+          <div>
+            <span class="eyebrow">Cuentas</span>
+            <h1>Estudiantes</h1>
+          </div>
+        </div>
+        <div class="card">
+          <table id="tabla-estudiantes">
+            <thead><tr><th>Nombre</th><th>Correo</th><th>Matrícula</th><th>Cuatrimestre</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <div class="empty-state hidden" id="estudiantes-empty">No hay estudiantes registrados.</div>
+        </div>
+      </section>
+
+      <!-- Vista: asesores -->
+      <section id="view-asesores" class="hidden">
+        <div class="main-header">
+          <div>
+            <span class="eyebrow">Cuentas y postulaciones</span>
+            <h1>Asesores</h1>
+          </div>
+        </div>
+        <div class="card">
+          <table id="tabla-asesores">
+            <thead><tr><th>Nombre</th><th>Correo</th><th>Materias</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <div class="empty-state hidden" id="asesores-empty">No hay asesores registrados.</div>
+        </div>
+      </section>
+
+      <!-- Vista: quejas y sugerencias -->
+      <section id="view-quejas" class="hidden">
+        <div class="main-header">
+          <div>
+            <span class="eyebrow">Buzón</span>
+            <h1>Quejas y sugerencias</h1>
+          </div>
+        </div>
+        <div class="card">
+          <table id="tabla-quejas">
+            <thead><tr><th>Tipo</th><th>De</th><th>Mensaje</th><th>Respuesta</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <div class="empty-state hidden" id="quejas-empty">No hay quejas ni sugerencias por ahora.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

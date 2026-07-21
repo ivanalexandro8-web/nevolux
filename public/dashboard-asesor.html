@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nevolux — Panel del asesor</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">nevo<span style="color:var(--accent)">lux</span></div>
+      <div class="nav-group">
+        <div class="nav-item active" data-view="solicitudes">Solicitudes</div>
+        <div class="nav-item" data-view="materias">Mis materias</div>
+        <div class="nav-item" data-view="horarios">Horarios</div>
+        <div class="nav-item" data-view="examen">Examen de certificación</div>
+        <div class="nav-item" data-view="chat">Chat</div>
+        <div class="nav-item" data-view="quejas">Quejas y sugerencias</div>
+      </div>
+      <div class="session-box">
+        <span class="who" id="session-nombre">—</span>
+        Asesor
+        <div style="margin-top: 0.8rem;">
+          <button class="btn btn-ghost" style="width:100%; font-size:0.8rem; padding:0.5rem;" onclick="logout()">Cerrar sesión</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <!-- Vista: solicitudes recibidas -->
+      <section id="view-solicitudes">
+        <div class="main-header">
+          <div>
+            <span class="eyebrow">Bandeja de entrada</span>
+            <h1>Solicitudes de estudiantes</h1>
+          </div>
+        </div>
+        <div class="card">
+          <table id="tabla-solicitudes">
+            <thead><tr><th>Estudiante</th><th>Materia</th><th>Estado</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <div class="empty-state hidden" id="solicitudes-empty">No tienes solicitudes por ahora.</div>
+        </div>
+      </section>
+
+      <!-- Vista: mis materias -->
+      <section id="view-materias" class="hidden">
+        <div class="main-header">
+          <div>
+            <span class="eyebrow">Máximo 2 materias por asesor</span>
+            <h1>Mi perfil</h1>
+          </div>
+        </div>
+        <div class="card" id="perfil-card"></div>
+
+        <div class="card" style="margin-top:1.2rem;" id="segunda-materia-card">
+          <h3>Postular segunda materia</h3>
+          <label for="select-segunda-materia">Materia</label>
+          <select id="select-segunda-materia" style="max-width:320px;"></select>
+          <button class="btn btn-primary" id="btn-segunda-materia" style="margin-top:1rem;">Postular</button>
+          <p style="color:var(--text-muted); font-size:0.82rem; margin-top:0.6rem;">
+            El administrador revisa cada postulación antes de aprobarla.
+          </p>
+          <div class="form-msg" id="segunda-materia-msg"></div>
+        </div>
+      </section>
+
+      <!-- Vista: horarios -->
+      <section id="view-horarios" class="hidden">
+        <div class="main-header">
+          <div>
+            <span class="eyebrow">Disponibilidad</span>
+            <h1>Mis horarios</h1>
+          </div>
+        </div>
+        <div class="card">
+          <div class="grid grid-3">
+            <div>
+              <label for="h-dia">Día</label>
+              <select id="h-dia">
+                <option>lunes</option><option>martes</option><option>miércoles</option>
+                <option>jueves</option><option>viernes</option><option>sábado</option>
+              </select>
+            </div>
+            <div><label for="h-inicio">Hora inicio</label><input type="time" id="h-inicio" /></div>
+            <div><label for="h-fin">Hora fin</label><input type="time" id="h-fin" /></div>
+          </div>
+          <button class="btn btn-primary" id="btn-agregar-horario" style="margin-top:1rem;">Agregar horario</button>
+          <div class="form-msg" id="horario-msg"></div>
+        </div>
+        <div class="card" style="margin-top:1.2rem;">
+          <table id="tabla-horarios">
+            <thead><tr><th>Día</th><th>Inicio</th><th>Fin</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <div class="empty-state hidden" id="horarios-empty">Aún no registras horarios disponibles.</div>
+        </div>
+      </section>
+
+      <!-- Vista: examen de certificación -->
+      <section id="view-examen" class="hidden">
+        <div class="main-header">
+          <div>
+            <span class="eyebrow">25 preguntas · 10 minutos · 80% para aprobar</span>
+            <h1>Examen de certificación</h1>
+          </div>
+          <div class="timer hidden" id="examen-timer">10:00</div>
+        </div>
+
+        <div class="card" id="examen-intro">
+          <label for="examen-materia">Materia a certificar</label>
+          <select id="examen-materia" style="max-width:320px;"></select>
+          <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.8rem;">
+            Necesitas 80% o más para quedar habilitado como asesor de esta materia.
+            Si no apruebas, la materia queda bloqueada 4 meses antes de reintentar.
+          </p>
+          <button class="btn btn-primary" id="btn-iniciar-examen" style="margin-top:1rem;">Iniciar examen</button>
+        </div>
+
+        <form class="card hidden" id="examen-form" style="margin-top:1.2rem;">
+          <div id="examen-preguntas"></div>
+          <button type="submit" class="btn btn-primary" style="margin-top:1rem;">Enviar examen</button>
+        </form>
+
+        <div class="card hidden" id="examen-resultado" style="margin-top:1.2rem; text-align:center;">
+          <div class="stat-value" id="resultado-porcentaje">—</div>
+          <div class="stat-label" id="resultado-texto"></div>
+        </div>
+      </section>
+
+      <!-- Vista: chat -->
+      <section id="view-chat" class="hidden">
+        <div class="main-header">
+          <div>
+            <span class="eyebrow">Asesorías activas</span>
+            <h1>Chat</h1>
+          </div>
+          <button class="btn btn-danger hidden" id="btn-finalizar-asesoria">Finalizar asesoría</button>
+        </div>
+        <div class="card">
+          <label for="select-chat">Conversación</label>
+          <select id="select-chat" style="max-width:320px; margin-bottom:1rem;"></select>
+          <div class="chat-box" id="chat-box">
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input-row">
+              <input type="text" id="chat-input" placeholder="Escribe un mensaje..." />
+              <button class="btn btn-primary" id="chat-enviar">Enviar</button>
+            </div>
+          </div>
+          <div class="empty-state hidden" id="chat-empty">
+            El chat se habilita cuando aceptas una solicitud.
+          </div>
+        </div>
+      </section>
+
+      <!-- Vista: quejas y sugerencias -->
+      <section id="view-quejas" class="hidden">
+        <div class="main-header">
+          <div>
+            <span class="eyebrow">Buzón directo al administrador</span>
+            <h1>Quejas y sugerencias</h1>
+          </div>
+        </div>
+        <div class="card">
+          <label for="queja-tipo">Tipo</label>
+          <select id="queja-tipo" style="max-width:220px;">
+            <option value="queja">Queja</option>
+            <option value="sugerencia">Sugerencia</option>
+          </select>
+          <label for="queja-mensaje">Mensaje</label>
+          <textarea id="queja-mensaje" rows="4"></textarea>
+          <button class="btn btn-primary" id="btn-enviar-queja" style="margin-top:1rem;">Enviar</button>
+          <div class="form-msg" id="queja-msg"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/asesor.js"></script>
+</body>
+</html>
